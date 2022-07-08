@@ -1,0 +1,12 @@
+{
+  "name": "cip-template-simple",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "author": "",
+  "license": "MIT"
+}

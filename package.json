@@ -1,0 +1,12 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "create-insomnia-plugin":"node bin/cli.js"
+  },
+  "devDependencies": {
+    "commander": "^9.3.0",
+    "lerna": "^5.1.4",
+    "prompts": "^2.4.2"
+  }
+}
