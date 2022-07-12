@@ -9,68 +9,98 @@ import type { Settings } from '.'
 import type { PackageManager } from './utils/get-package-manager'
 
 export const createPlugin = async ({
-    settings,
-    packageManager,
-}:{
-    settings: Settings,
-    packageManager: PackageManager
+  settings,
+  packageManager,
+}: {
+  settings: Settings
+  packageManager: PackageManager
 }): Promise<void> => {
-    const root = path.resolve(settings['dir-name'])
+  const root = path.resolve(settings['dir-name'])
 
-    fs.ensureDirSync(root)
-    if (!isDirSafe(root)) {
-        process.exit(1)
-    }
+  fs.ensureDirSync(root)
+  if (!isDirSafe(root)) {
+    process.exit(1)
+  }
 
-    console.log(`Creating an Insomnia REST Client Plugin in ${root}\n`)
-    
-    const packageJsonPath = path.join(root, 'package.json')
-    let packageJson = {}
-    
-    if (fs.existsSync(packageJsonPath)) {
-        try {
-            packageJson = fs.readJsonSync(packageJsonPath, {throws: true})
-        } catch (err) {
-            console.error(`Cannot read existing package.json:\n${err}`)
-        }
-    }
-    packageJson = generatePackageJson({replaceWith: {}, replace: {}, blacklist: [], mergelist: [], settings}) 
-    console.log(packageJson)
+  console.log(`Creating an Insomnia REST Client Plugin in ${root}\n`)
+
+  const packageJsonPath = path.join(root, 'package.json')
+  let packageJson = {}
+
+  if (fs.existsSync(packageJsonPath)) {
     try {
-        fs.writeJsonSync(packageJsonPath, packageJson)
-        console.log(`Created package.json at ${packageJsonPath}`)
-    } catch (e) {
-        console.error(`Unable to create package.json:\n${e}`)
-        process.exit(1)
+      packageJson = fs.readJsonSync(packageJsonPath, { throws: true })
+    } catch (err) {
+      console.error(`Cannot read existing package.json:\n${err}`)
     }
-    
-    const originalDir = process.cwd()
-    const templateName = `cip-template-${settings['plugin-template']}`
-    const localPackagePath = path.resolve(originalDir, '..', templateName)
-    process.chdir(root)
+  }
+  packageJson = generatePackageJson({
+    replaceWith: {},
+    replace: {},
+    blacklist: [],
+    mergelist: [],
+    settings,
+  })
+  console.log(packageJson)
+  try {
+    fs.writeJsonSync(packageJsonPath, packageJson)
+    console.log(`Created package.json at ${packageJsonPath}`)
+  } catch (e) {
+    console.error(`Unable to create package.json:\n${e}`)
+    process.exit(1)
+  }
 
-    console.log("Installing dependencies, this may take a few moments...")
-    const devDependencies = ["eslint", templateName].join(' ')
-    if (!packageInit({packageManager, devDependencies, logLevel: settings['log-level'], templatePath: localPackagePath})) {
-        process.exit(1)
+  const originalDir = process.cwd()
+  const templateName = `cip-template-${settings['plugin-template']}`
+  const localPackagePath = path.resolve(originalDir, '..', templateName)
+  process.chdir(root)
+
+  console.log('Installing dependencies, this may take a few moments...')
+  const devDependencies = ['eslint', 'prettier', templateName].join(' ')
+  if (
+    !packageInit({
+      packageManager,
+      devDependencies,
+      logLevel: settings['log-level'],
+      templatePath: localPackagePath,
+    })
+  ) {
+    process.exit(1)
+  }
+
+  const templatePath = path.dirname(
+    require.resolve(`${templateName}/package.json`, {
+      paths: [root, 'node_modules'],
+    })
+  )
+  if (fs.existsSync(templatePath)) {
+    const templatePackageJson = fs.readJsonSync(
+      path.resolve(templatePath, 'package.json'),
+      { throws: true }
+    )
+    console.log(process.cwd(), root, templatePath, templatePackageJson)
+    packageJson = generatePackageJson({
+      replaceWith: templatePackageJson,
+      replace: packageJson,
+    })
+    const readMeExists = fs.existsSync(path.join(root, 'README.md'))
+    if (readMeExists) {
+      fs.renameSync(
+        path.join(root, 'README.md'),
+        path.join(root, 'README.old.md')
+      )
     }
+    fs.copySync(templatePath, root)
+    fs.writeJsonSync(packageJsonPath, packageJson)
 
-    const templatePath = path.dirname(require.resolve(`${templateName}/package.json`, {paths:[root, 'node_modules']}))
-    if (fs.existsSync(templatePath)) {
-        const templatePackageJson = fs.readJsonSync(path.resolve(templatePath, 'package.json'), {throws: true})
-        console.log(process.cwd(), root, templatePath, templatePackageJson)
-        packageJson = generatePackageJson({replaceWith: templatePackageJson, replace: packageJson})
-        const readMeExists = fs.existsSync(path.join(root, 'README.md'))
-        if (readMeExists) {
-            fs.renameSync(path.join(root, 'README.md'), path.join(root, 'README.old.md'))
-        }
-        fs.copySync(templatePath, root)
-        fs.writeJsonSync(packageJsonPath, packageJson)
+    const templateGitIgnoreExists = fs.existsSync(path.join(root, 'gitignore'))
+    if (templateGitIgnoreExists) {
+      fs.renameSync(path.join(root, 'gitignore'), path.join(root, '.gitignore'))
     }
+  }
 
-    execSync(`${packageManager} run lint:fix`)
+  execSync(`${packageManager} run lint:fix && ${packageManager} run format`)
 
-    console.log("Initializing git repository...")
-    gitInit(settings['log-level']) 
-
+  console.log('Initializing git repository...')
+  gitInit(settings['log-level'])
 }

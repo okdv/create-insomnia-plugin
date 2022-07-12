@@ -1,11 +1,31 @@
 {
   "name": "cip-template-simple",
-  "version": "1.0.1-1.0.1-alpha.0",
+  "version": "1.1.1-alpha.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --ignore-path .gitignore --write ."
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "eslintConfig": {
+    "env": {
+      "es2021": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    }
   },
   "author": "",
   "license": "MIT"

@@ -21,3 +21,6 @@ node_modules/
 .cache/
 
 dist/
+
+# Don't commit .gitignores that are not part of templates
+packages/cip-teplate-*/.gitignore

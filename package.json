@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "create-insomnia-plugin":"node bin/cli.js"
+    "create-insomnia-plugin": "node bin/cli.js"
   },
   "devDependencies": {
     "commander": "^9.3.0",
