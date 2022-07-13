@@ -1,9 +1,11 @@
-const init = async (context) => {}
+const init = async (context) => {
+    console.log(context)
+}
 
-module.exports.requestHooks = [];
-module.exports.responseHooks = [];
-module.exports.requestActions = [];
-module.exports.requestGroupActions = [];
-module.exports.workspaceActions = [];
-module.exports.documentActions = [];
-module.exports.configGenerators = [];
+module.exports.requestHooks = [init];
+module.exports.responseHooks = [init];
+module.exports.requestActions = [init];
+module.exports.requestGroupActions = [init];
+module.exports.workspaceActions = [init];
+module.exports.documentActions = [init];
+module.exports.configGenerators = [init];

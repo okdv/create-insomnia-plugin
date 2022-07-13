@@ -16,6 +16,12 @@ export const createPlugin = async ({
   packageManager: PackageManager
 }): Promise<void> => {
   const root = path.resolve(settings['dir-name'])
+  const packageJsonPath = path.join(root, 'package.json')
+  const originalDir = process.cwd()
+  const templateName = `cip-template-${settings['plugin-template']}`
+  const localTemplatePath = path.resolve(originalDir, '..', templateName)
+  const devDependencies = ['eslint', 'prettier']
+  let packageJson = {}
 
   fs.ensureDirSync(root)
   if (!isDirSafe(root)) {
@@ -23,9 +29,6 @@ export const createPlugin = async ({
   }
 
   console.log(`Creating an Insomnia REST Client Plugin in ${root}\n`)
-
-  const packageJsonPath = path.join(root, 'package.json')
-  let packageJson = {}
 
   if (fs.existsSync(packageJsonPath)) {
     try {
@@ -50,18 +53,16 @@ export const createPlugin = async ({
     process.exit(1)
   }
 
-  const originalDir = process.cwd()
-  const templateName = `cip-template-${settings['plugin-template']}`
-  const localPackagePath = path.resolve(originalDir, '..', templateName)
+  fs.existsSync(localTemplatePath)
+    ? devDependencies.push(localTemplatePath)
+    : devDependencies.push(templateName)
   process.chdir(root)
 
   console.log('Installing dependencies, this may take a few moments...')
-  const devDependencies = ['eslint', 'prettier', templateName].join(' ')
   if (
     !packageInit({
       packageManager,
       devDependencies,
-      logLevel: settings['log-level'],
     })
   ) {
     process.exit(1)
@@ -92,10 +93,7 @@ export const createPlugin = async ({
     fs.copySync(templatePath, root)
     fs.writeJsonSync(packageJsonPath, packageJson)
 
-    const templateGitIgnoreExists = fs.existsSync(path.join(root, 'gitignore'))
-    if (templateGitIgnoreExists) {
-      fs.renameSync(path.join(root, 'gitignore'), path.join(root, '.gitignore'))
-    }
+    fs.moveSync(path.join(root, 'gitignore'), path.join(root, '.gitignore'))
   }
 
   execSync(`${packageManager} run lint:fix && ${packageManager} run format`)

@@ -4,46 +4,30 @@ import type { PackageManager } from './get-package-manager'
 export const packageInit = ({
   packageManager,
   devDependencies,
-  logLevel,
-  templatePath,
 }: {
   packageManager: PackageManager
-  devDependencies: string
-  logLevel?: string
-  templatePath?: string
+  devDependencies: ReadonlyArray<string>
 }) => {
-  const argsArr = []
+  execSync(`${packageManager} install`)
+  let args = ['--no-audit', '--save-dev'],
+    exactOpt = '--save-exact',
+    installCmd = `${packageManager} install`
   if (packageManager === 'yarn') {
-    argsArr.push(['install', devDependencies])
-    argsArr.push(['add', '--exact', '--dev', devDependencies])
-    if (templatePath) {
-      argsArr.push(['add', templatePath, '--dev'])
-    }
-  } else {
-    argsArr.push(['install', '--no-audit'])
-    argsArr.push([
-      'install',
-      '--save-exact',
-      '--save-dev',
-      '--no-audit',
-      devDependencies,
-    ])
-    if (templatePath) {
-      argsArr.push(['install', '--no-audit', '--save-dev', templatePath])
-    }
+    args = ['--dev']
+    exactOpt = '--exact'
+    installCmd = `${packageManager} add`
   }
-  logLevel && argsArr.forEach(args => args.push(`--${logLevel}`))
-  argsArr.forEach(args => {
-    logLevel && args.push(`--${logLevel}`)
-    const cmd = packageManager + ' ' + args.join(' ')
-    try {
-      execSync(cmd)
-      console.log(cmd)
-    } catch (e) {
-      console.error(`Unable to execute ${cmd}:\n${e}`)
-      return false
+  const remoteDependencies = devDependencies.map(name => {
+    if (name.includes('/')) {
+      execSync(`${installCmd} ${args.join(' ')} ${name}`)
+    } else {
+      return name
     }
   })
+  if (remoteDependencies.length > 0) {
+    args.push(exactOpt)
+    execSync(`${installCmd} ${args.join(' ')} ${remoteDependencies.join(' ')}`)
+  }
 
   return true
 }
