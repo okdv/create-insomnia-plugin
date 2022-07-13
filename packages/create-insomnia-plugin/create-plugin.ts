@@ -62,7 +62,6 @@ export const createPlugin = async ({
       packageManager,
       devDependencies,
       logLevel: settings['log-level'],
-      templatePath: localPackagePath,
     })
   ) {
     process.exit(1)
