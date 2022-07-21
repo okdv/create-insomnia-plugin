@@ -34,12 +34,12 @@ export const createPlugin = async (defaultPackageJson: {
     console.log(`Using ${templateName} as template`)
   }
 
+  chdir(root)
+
   console.log('Installing dependencies, this may take a few moments...')
   if (!packageInit(devDependencies)) {
     process.exit(1)
   }
-
-  chdir(root)
 
   const templateModule = path.dirname(
     require.resolve(`${templateName}/package.json`, {
