@@ -5,23 +5,8 @@ import prompts from 'prompts'
 import validateProjectName from 'validate-npm-package-name'
 import { createPlugin } from './create-plugin'
 import { formatName } from './utils/format-name'
-import { getPackageManager } from './utils/get-package-manager'
 import type { Names } from './utils/format-name'
-import type { Answers } from 'prompts'
 import packageJson from './package.json'
-
-export type Settings = Answers<
-  | 'package-name'
-  | 'dir-name'
-  | 'log-level'
-  | 'plugin-display-name'
-  | 'plugin-description'
-  | 'plugins-path'
-  | 'plugin-template'
-  | 'plugin-author'
-  | 'package-license'
-  | 'package-repo'
->
 
 let names: Names = { pluginName: '', packageName: '', dirName: '' }
 
@@ -52,10 +37,7 @@ const program = new Commander.Command(packageJson.name)
   .option('-t, --theme', 'Use theme template')
   .option('-s, --simple', 'Use simple template')
   .option('-c, --complex', 'Choose complex template')
-  .option('-q, --quiet', 'Only essential logging')
   .option('-p, --plugins-path [path]', 'Path to Insomnia plugins folder')
-  .option('-v, --verbose', 'Log everything')
-  .option('-y, --yes', 'Skip questions, use defaults')
   .allowUnknownOption()
   .parse(process.argv)
 
@@ -65,16 +47,6 @@ options.yes && prompts.inject([names.packageName, names.pluginName])
 
 const run = async (): Promise<void> => {
   const res = await prompts([
-    {
-      type: null,
-      name: 'package-name',
-      message: 'Name in package manager (npm, yarn)',
-    },
-    {
-      type: null,
-      name: 'log-level',
-      message: 'Level of logging',
-    },
     {
       type: 'text',
       name: 'dir-name',
@@ -133,22 +105,41 @@ const run = async (): Promise<void> => {
       message: 'License:',
       initial: 'MIT',
     },
-    {
-      type: 'text',
-      name: 'package-repo',
-      message: 'Repository:',
-    },
   ])
 
-  const packageManager = getPackageManager()
-  res['package-name'] = names.packageName
-  if (options.pluginsPath) res['plugins-path'] = options.pluginsPath
-  if (options.simple) res['plugin-template'] = 'simple'
-  if (options.complex) res['plugin-template'] = 'complex'
-  if (options.theme) res['plugin-template'] = 'theme'
-  if (options.quiet) res['log-level'] = 'silent'
-  if (options.verbose) res['log-level'] = 'verbose'
-  await createPlugin({ settings: res, packageManager })
+  const defaultRepoUrl = `htts://github.com/user/${names.packageName}`
+
+  const defaultPackageJson = {
+    name: names.packageName,
+    description: res['plugin-description'],
+    author: res['plugin-author'],
+    license: res['package-license'],
+    insomnia: {
+      name: names.packageName,
+      displayName: res['plugin-display-name'],
+      description: res['plugin-description'],
+      publisher: {
+        name: res['plugin-author'],
+      },
+    },
+    repository: {
+      type: 'git',
+      url: `${defaultRepoUrl}.git`,
+    },
+    scripts: {
+      update: '',
+    },
+    bugs: {
+      url: `${defaultRepoUrl}/issues`,
+    },
+    homepage: `https://insomnia.rest/plugins/${names.packageName}`,
+    createInsomniaPluginTemplate:
+      res['plugin-template'] || options.template || 'simple',
+    insomniaPluginsPath:
+      res['plugins-path'] || options.pluginsPath || '/apps/Insomnia/plugins',
+  }
+
+  await createPlugin(defaultPackageJson)
 }
 
 run().catch(async err => {

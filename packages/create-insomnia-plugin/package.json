@@ -10,7 +10,8 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --ignore-path .prettierignore --write \"**/*.+(js|ts|json)\"",
     "precommit": "npm run lint:fix && npm run format && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "bin": {
     "create-insomnia-plugin": "./dist/index.js"
