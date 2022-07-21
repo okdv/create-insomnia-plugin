@@ -4,6 +4,7 @@ import { execSync } from 'child_process'
 import { isDirSafe } from './utils/is-dir-safe'
 import { generatePackageJson } from './utils/generate-package-json'
 import { packageInit } from './utils/package-init'
+import { chdir } from 'process'
 
 export const createPlugin = async (defaultPackageJson: {
   name: string
@@ -37,6 +38,8 @@ export const createPlugin = async (defaultPackageJson: {
   if (!packageInit(devDependencies)) {
     process.exit(1)
   }
+
+  chdir(root)
 
   const templateModule = path.dirname(
     require.resolve(`${templateName}/package.json`, {
