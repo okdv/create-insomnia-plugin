@@ -4,7 +4,6 @@ import { execSync } from 'child_process'
 import { isDirSafe } from './utils/is-dir-safe'
 import { generatePackageJson } from './utils/generate-package-json'
 import { packageInit } from './utils/package-init'
-import { chdir } from 'process'
 
 export const createPlugin = async (defaultPackageJson: {
   name: string
@@ -34,7 +33,7 @@ export const createPlugin = async (defaultPackageJson: {
     console.log(`Using ${templateName} as template`)
   }
 
-  chdir(root)
+  process.chdir(root)
 
   console.log('Installing dependencies, this may take a few moments...')
   if (!packageInit(devDependencies)) {
