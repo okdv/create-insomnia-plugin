@@ -61,7 +61,7 @@ export const createPlugin = async (defaultPackageJson: {
       { throws: true }
     )
     const mergedPackageJson = generatePackageJson({
-      original: defaultPackageJson,
+      original: fs.readJsonSync(packageJsonPath, { throws: true }),
       merger: templatePackageJson,
     })
     if (fs.existsSync(path.join(root, 'README.md'))) {
