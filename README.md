@@ -16,7 +16,6 @@ Each template has built in scripts to simplify the development process, as well 
 `npm run lint` - Runs eslint
 `npm run lint:fix` Runs eslint, but fixes problems where possible
 `npm run format` - Runs prettier, makes changes 
-`npm run update-plugins` - Adds plugin to the provided Insomnia plugins folder, disabled/commented out by default
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

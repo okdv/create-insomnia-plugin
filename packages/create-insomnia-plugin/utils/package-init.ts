@@ -9,7 +9,6 @@ export const packageInit = (devDependencies: ReadonlyArray<string>) => {
     } else {
       cmd = `npm install --save-dev --no-audit --save-exact ${name}`
     }
-    console.log(cmd)
     execSync(cmd)
   })
 

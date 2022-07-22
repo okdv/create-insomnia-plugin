@@ -37,13 +37,13 @@ const program = new Commander.Command(packageJson.name)
   .option('-t, --theme', 'Use theme template')
   .option('-s, --simple', 'Use simple template')
   .option('-c, --complex', 'Choose complex template')
-  .option('-p, --plugins-path [path]', 'Path to Insomnia plugins folder')
+  //  .option('-p, --plugins-path [path]', 'Path to Insomnia plugins folder')
   .allowUnknownOption()
   .parse(process.argv)
 
 const options = program.opts()
 
-options.yes && prompts.inject([names.packageName, names.pluginName])
+// options.yes && prompts.inject([names.packageName, names.pluginName])
 
 const run = async (): Promise<void> => {
   if (options.theme) {
@@ -70,11 +70,13 @@ const run = async (): Promise<void> => {
       name: 'plugin-description',
       message: 'Describe your plugin:',
     },
+    /*
     {
       type: options.pluginsPath ? null : 'text',
       name: 'plugins-path',
       message: 'Insomnia plugins folder path:',
-    },
+    }, 
+    */
     {
       type:
         options.theme || options.simple || options.complex ? null : 'select',
@@ -141,9 +143,14 @@ const run = async (): Promise<void> => {
     },
     homepage: `https://insomnia.rest/plugins/${names.packageName}`,
     createInsomniaPluginTemplate:
-      res['plugin-template'] || options.template || 'simple',
+      res['plugin-template'] ||
+      (options.theme && 'theme') ||
+      (options.complex && 'complex') ||
+      'simple',
+    /*
     insomniaPluginsPath:
       res['plugins-path'] || options.pluginsPath || '/apps/Insomnia/plugins',
+      */
     rawName: names.rawName,
   }
 
