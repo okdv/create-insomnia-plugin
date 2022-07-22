@@ -1,3 +1,5 @@
+// https://docs.insomnia.rest/insomnia/hooks-and-actions#document-actions
+
 module.exports = [
     {
         label: '',

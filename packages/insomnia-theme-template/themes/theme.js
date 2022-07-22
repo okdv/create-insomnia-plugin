@@ -1,3 +1,5 @@
+// https://docs.insomnia.rest/insomnia/custom-themes
+
 module.exports.themes = [{
     name: 'theme-name', // theme name in kebab-case
     displayName: 'Theme Name', // formatted theme name
@@ -140,4 +142,4 @@ module.exports.themes = [{
             }
         }
     }
-}]
+}];

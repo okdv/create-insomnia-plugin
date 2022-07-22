@@ -1,3 +1,5 @@
+// https://docs.insomnia.rest/insomnia/hooks-and-actions#config-generator
+
 module.exports = [
     {
         label: '',
@@ -8,10 +10,16 @@ module.exports = [
             format,
             formatVersion
         }) => {
+            console.log(
+                contents,
+                rawContents,
+                format,
+                formatVersion
+            );
             return {
                 document: '',
                 error: ''
-            }
+            };
         }
     }
 ];

@@ -1,3 +1,5 @@
+// https://docs.insomnia.rest/insomnia/hooks-and-actions
+
 const init = async (context) => {
     console.log(context)
 }
