@@ -4,7 +4,6 @@ export const packageInit = (devDependencies: ReadonlyArray<string>) => {
   let cmd = 'npm install'
   execSync(cmd)
   devDependencies.forEach(name => {
-    console.log(process.cwd())
     if (name.includes('/')) {
       cmd = `npm install --save-dev --no-audit ${name}`
     } else {
