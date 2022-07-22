@@ -17,8 +17,8 @@
     "create-insomnia-plugin": "./dist/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Otho DuBoise",
+  "license": "MIT",
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
     "@types/fs-extra": "^9.0.13",

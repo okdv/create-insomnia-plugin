@@ -135,18 +135,16 @@ const run = async (): Promise<void> => {
       type: 'git',
       url: `${defaultRepoUrl}.git`,
     },
-    scripts: {
-      update: '',
-    },
+    scripts: {},
     bugs: {
       url: `${defaultRepoUrl}/issues`,
     },
     homepage: `https://insomnia.rest/plugins/${names.packageName}`,
-    'create-insomnia-plugin-template':
+    createInsomniaPluginTemplate:
       res['plugin-template'] || options.template || 'simple',
-    'insomnia-plugins-path':
+    insomniaPluginsPath:
       res['plugins-path'] || options.pluginsPath || '/apps/Insomnia/plugins',
-    'raw-name': names.rawName,
+    rawName: names.rawName,
   }
 
   await createPlugin(defaultPackageJson)

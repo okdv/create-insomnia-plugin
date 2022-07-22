@@ -1,5 +1,5 @@
 # create-insomnia-plugin
-Monorepo for [create-insomnia-plugin](https://www.npmjs.com/package/create-insomnia-plugin) - an opionated bootstrapper for [Insomnia REST Client](https://insomnia.rest) plugins and themes
+An opionated bootstrapper for [Insomnia REST Client](https://insomnia.rest) plugins and themes
 
 ## Usage 
 Getting started is simple, just run `npx create-insomnia-plugin <package-name>` and complete the prompts
@@ -21,9 +21,7 @@ Each template has built in scripts to simplify the development process, as well 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-*Before creating pull requests*:
-- Run `npm run precommit` in `packages/create-insomnia-plugin`
-- Make sure to update any tests as needed
+Please make sure to update tests as appropriate.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
