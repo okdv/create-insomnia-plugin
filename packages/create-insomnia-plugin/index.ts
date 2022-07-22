@@ -8,7 +8,7 @@ import { formatName } from './utils/format-name'
 import type { Names } from './utils/format-name'
 import packageJson from './package.json'
 
-let names: Names = { pluginName: '', packageName: '', dirName: '' }
+let names: Names = { pluginName: '', packageName: '', dirName: '', rawName: '' }
 
 const program = new Commander.Command(packageJson.name)
   .name(packageJson.name)
@@ -46,6 +46,10 @@ const options = program.opts()
 options.yes && prompts.inject([names.packageName, names.pluginName])
 
 const run = async (): Promise<void> => {
+  if (options.theme) {
+    names = formatName(names.packageName, true)
+  }
+
   const res = await prompts([
     {
       type: 'text',
@@ -72,7 +76,8 @@ const run = async (): Promise<void> => {
       message: 'Insomnia plugins folder path:',
     },
     {
-      type: options.template ? null : 'select',
+      type:
+        options.theme || options.simple || options.complex ? null : 'select',
       name: 'plugin-template',
       message: 'Choose a plugin template:',
       choices: [
@@ -107,6 +112,10 @@ const run = async (): Promise<void> => {
     },
   ])
 
+  if (res['plugin-template'] === 'theme') {
+    names = formatName(names.packageName, true)
+  }
+
   const defaultRepoUrl = `htts://github.com/user/${names.packageName}`
 
   const defaultPackageJson = {
@@ -133,10 +142,11 @@ const run = async (): Promise<void> => {
       url: `${defaultRepoUrl}/issues`,
     },
     homepage: `https://insomnia.rest/plugins/${names.packageName}`,
-    createInsomniaPluginTemplate:
+    'create-insomnia-plugin-template':
       res['plugin-template'] || options.template || 'simple',
-    insomniaPluginsPath:
+    'insomnia-plugins-path':
       res['plugins-path'] || options.pluginsPath || '/apps/Insomnia/plugins',
+    'raw-name': names.rawName,
   }
 
   await createPlugin(defaultPackageJson)

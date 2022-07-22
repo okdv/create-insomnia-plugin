@@ -2,7 +2,7 @@
   "name": "insomnia-plugin-template-complex",
   "version": "1.0.1-alpha.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "lint:fix": "npm run lint -- --fix",

@@ -7,16 +7,18 @@ import { packageInit } from './utils/package-init'
 
 export const createPlugin = async (defaultPackageJson: {
   name: string
-  createInsomniaPluginTemplate: 'theme' | 'simple' | 'complex'
+  'create-insomnia-plugin-template': 'theme' | 'simple' | 'complex'
+  'raw-name': string
   [key: string]: any
 }): Promise<void> => {
   const root = path.resolve(defaultPackageJson.name)
+  const themeFilePath = path.join(root, 'theme', 'theme.js')
   const packageJsonPath = path.join(root, 'package.json')
   const originalDir = process.cwd()
   const templateName =
-    defaultPackageJson.createInsomniaPluginTemplate === 'theme'
-      ? `insomnia-${defaultPackageJson.createInsomniaPluginTemplate}-template`
-      : `insomnia-plugin-template-${defaultPackageJson.createInsomniaPluginTemplate}`
+    defaultPackageJson['create-insomnia-plugin-template'] === 'theme'
+      ? `insomnia-theme-template`
+      : `insomnia-plugin-template-${defaultPackageJson['create-insomnia-plugin-template']}`
   const localTemplatePackagePath = path.resolve(originalDir, '..', templateName)
   const devDependencies = [
     'eslint',
@@ -71,6 +73,17 @@ export const createPlugin = async (defaultPackageJson: {
     fs.copySync(templateModule, root)
     fs.writeJsonSync(packageJsonPath, mergedPackageJson)
     fs.moveSync(path.join(root, 'gitignore'), path.join(root, '.gitignore'))
+    if (fs.existsSync(themeFilePath)) {
+      const themeJsStr = fs
+        .readFileSync(themeFilePath, { encoding: 'utf8', flag: 'r' })
+        .replace('theme-name', defaultPackageJson['raw-name'])
+        .replace('Theme Name', defaultPackageJson['display-name'])
+      fs.writeFileSync(themeFilePath, themeJsStr)
+      fs.moveSync(
+        themeFilePath,
+        path.join(root, 'theme', `${defaultPackageJson['raw-name']}.js`)
+      )
+    }
   }
 
   execSync(`npm run lint:fix && npm run format`)
