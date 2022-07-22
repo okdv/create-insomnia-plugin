@@ -12,7 +12,7 @@ export const createPlugin = async (defaultPackageJson: {
   [key: string]: any
 }): Promise<void> => {
   const root = path.resolve(defaultPackageJson.name)
-  const themeFilePath = path.join(root, 'theme', 'theme.js')
+  const themeFilePath = path.join(root, 'themes', 'theme.js')
   const packageJsonPath = path.join(root, 'package.json')
   const originalDir = process.cwd()
   const templateName =
