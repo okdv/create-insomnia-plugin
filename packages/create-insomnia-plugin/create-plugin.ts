@@ -35,7 +35,11 @@ export const createPlugin = async (defaultPackageJson: {
 
   process.chdir(root)
 
-  console.log(process.cwd(), root, 'Installing dependencies, this may take a few moments...')
+  console.log(
+    process.cwd(),
+    root,
+    'Installing dependencies, this may take a few moments...'
+  )
   if (!packageInit(devDependencies)) {
     process.exit(1)
   }

@@ -1,14 +1,14 @@
 import { execSync } from 'child_process'
 
 export const packageInit = (devDependencies: ReadonlyArray<string>) => {
-  let cmd = 'npm install --registry=https://registry.npmjs.org/'
+  let cmd = 'npm install'
   execSync(cmd)
   devDependencies.forEach(name => {
-    console.log(process.cwd());
+    console.log(process.cwd())
     if (name.includes('/')) {
-      cmd = `npm install --registry=https://registry.npmjs.org/ --save-dev --no-audit ${name}`
+      cmd = `npm install --save-dev --no-audit ${name}`
     } else {
-      cmd = `npm install --registry=https://registry.npmjs.org/ --save-dev --no-audit --save-exact ${name}`
+      cmd = `npm install --save-dev --no-audit --save-exact ${name}`
     }
     console.log(cmd)
     execSync(cmd)
