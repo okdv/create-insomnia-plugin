@@ -13,9 +13,17 @@ export const createPlugin = async (defaultPackageJson: {
   const root = path.resolve(defaultPackageJson.name)
   const packageJsonPath = path.join(root, 'package.json')
   const originalDir = process.cwd()
-  const templateName = `cip-template-${defaultPackageJson.createInsomniaPluginTemplate}`
+  const templateName =
+    defaultPackageJson.createInsomniaPluginTemplate === 'theme'
+      ? `insomnia-${defaultPackageJson.createInsomniaPluginTemplate}-template`
+      : `insomnia-plugin-template-${defaultPackageJson.createInsomniaPluginTemplate}`
   const localTemplatePackagePath = path.resolve(originalDir, '..', templateName)
-  const devDependencies = ['eslint', 'prettier']
+  const devDependencies = [
+    'eslint',
+    'prettier',
+    'eslint-plugin-prettier',
+    'eslint-config-prettier',
+  ]
 
   fs.ensureDirSync(root)
   if (!isDirSafe(root)) {
