@@ -37,13 +37,24 @@ const program = new Commander.Command(packageJson.name)
   .option('-t, --theme', 'Use theme template')
   .option('-s, --simple', 'Use simple template')
   .option('-c, --complex', 'Choose complex template')
+  .option('-y, --yes', 'Skip prompts, use defaults/yes')
   //  .option('-p, --plugins-path [path]', 'Path to Insomnia plugins folder')
   .allowUnknownOption()
   .parse(process.argv)
 
 const options = program.opts()
 
-// options.yes && prompts.inject([names.packageName, names.pluginName])
+options.yes &&
+  prompts.inject([
+    names.dirName,
+    names.pluginName,
+    '',
+    (options.simple && 'simple') ||
+      (options.complex && 'complex') ||
+      (options.theme && 'theme'),
+    '',
+    'MIT',
+  ])
 
 const run = async (): Promise<void> => {
   if (options.theme) {
