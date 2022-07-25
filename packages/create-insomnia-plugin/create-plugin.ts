@@ -18,6 +18,7 @@ export const createPlugin = async (defaultPackageJson: {
 }): Promise<void> => {
   const root = path.resolve(defaultPackageJson.name)
   const themeFilePath = path.join(root, 'themes', 'theme.js')
+  const licensePath = path.join(root, 'LICENSE')
   const packageJsonPath = path.join(root, 'package.json')
   const originalDir = process.cwd()
   const templateName =
@@ -88,6 +89,16 @@ export const createPlugin = async (defaultPackageJson: {
         themeFilePath,
         path.join(root, 'themes', `${defaultPackageJson.rawName}.js`)
       )
+    }
+    if (fs.existsSync(licensePath)) {
+      if (defaultPackageJson.license === 'MIT') {
+        const licenseStr = fs
+          .readFileSync(licensePath, { encoding: 'utf8', flag: 'r' })
+          .replace('Otho DuBoise', defaultPackageJson.author)
+        fs.writeFileSync(licensePath, licenseStr)
+      } else {
+        fs.removeSync(licensePath)
+      }
     }
   }
 
