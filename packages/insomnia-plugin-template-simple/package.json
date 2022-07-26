@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-template-simple",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple Insomnia REST Client plugin template, built for create-insomnia-plugin",
   "main": "app.js",
   "scripts": {
@@ -34,8 +34,8 @@
   "license": "MIT",
   "homepage": "https://gitlab.com/okdv/create-insomnia-plugin",
   "bugs": "https://gitlab.com/okdv/create-insomnia-plugin/issues",
-    "repository": {
-      "type": "git",
-      "url": "https://gitlab.com/okdv/create-insomnia-plugin.git"
-    }
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/okdv/create-insomnia-plugin.git"
+  }
 }
