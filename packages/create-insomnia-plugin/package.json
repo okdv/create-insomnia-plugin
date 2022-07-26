@@ -1,6 +1,6 @@
 {
   "name": "create-insomnia-plugin",
-  "version": "1.1.19-alpha.0",
+  "version": "",
   "description": "",
   "main": "dist/index.js",
   "type": "commonjs",
