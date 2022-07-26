@@ -6,15 +6,20 @@ Getting started is simple, just run `npx create-insomnia-plugin <package-name>` 
 
 ### Options
 `-t`, `--theme` - Use theme template
+
 `-s`, `--simple` - Use simple template
+
 `-c`, `--complex` - Use complex template
+
 `-p`, `--plugins-path [path]` - Specify path to Insomnia app plugins folder
 
 ### Scripts
 Each template has built in scripts to simplify the development process, as well as to ensure high quality code
 
 `npm run lint` - Runs eslint
+
 `npm run lint:fix` Runs eslint, but fixes problems where possible
+
 `npm run format` - Runs prettier, makes changes 
 
 ## Contributing

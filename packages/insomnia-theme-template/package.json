@@ -1,7 +1,7 @@
 {
   "name": "insomnia-theme-template",
   "version": "1.0.0",
-  "description": "",
+  "description": "Theme template for Insomnia REST Client, built for create-insomnia-plugin",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
@@ -27,6 +27,15 @@
       "sourceType": "module"
     }
   },
-  "author": "Otho DuBoise",
-  "license": "MIT"
+  "author": {
+    "name": "Otho DuBoise",
+    "url": "https://otho.dev"
+  },
+  "license": "MIT",
+  "homepage": "https://gitlab.com/okdv/create-insomnia-plugin",
+  "bugs": "https://gitlab.com/okdv/create-insomnia-plugin/issues",
+    "repository": {
+      "type": "git",
+      "url": "https://gitlab.com/okdv/create-insomnia-plugin.git"
+    }
 }
