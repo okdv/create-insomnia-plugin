@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-template-simple",
-  "version": "",
+  "version": "0.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
