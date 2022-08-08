@@ -1,0 +1,41 @@
+{
+  "name": "insomnia-plugin-template-simple",
+  "version": "1.0.1",
+  "description": "Simple Insomnia REST Client plugin template, built for create-insomnia-plugin",
+  "main": "app.js",
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --ignore-path .gitignore --write ."
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "eslintConfig": {
+    "env": {
+      "es2021": true,
+      "node": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    }
+  },
+  "author": {
+    "name": "Otho DuBoise",
+    "url": "https://otho.dev"
+  },
+  "license": "MIT",
+  "homepage": "https://gitlab.com/okdv/create-insomnia-plugin",
+  "bugs": "https://gitlab.com/okdv/create-insomnia-plugin/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/okdv/create-insomnia-plugin.git"
+  }
+}

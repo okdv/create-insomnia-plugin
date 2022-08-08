@@ -1,9 +1,3 @@
-import type { Settings } from '..'
-
-type PackageObject = {
-  [key: string]: string | PackageObject | Array<string>
-}
-
 const defaultBlacklist = [
   'name',
   'version',
@@ -33,60 +27,26 @@ const defaultBlacklist = [
 const defaultMergelist = ['scripts', 'dependencies']
 
 export const generatePackageJson = ({
-  replaceWith,
-  replace,
-  blacklist = defaultBlacklist,
-  mergelist = defaultMergelist,
-  settings,
+  original,
+  merger,
 }: {
-  replaceWith: PackageObject
-  replace: PackageObject
-  blacklist?: ReadonlyArray<string>
-  mergelist?: ReadonlyArray<string>
-  settings?: Settings
-}) => {
-  if (settings) {
-    replaceWith = {
-      name: settings['package-name'],
-      description: settings['plugin-description'],
-      author: settings['plugin-author'],
-      license: settings['package-license'],
-      insomnia: {
-        name: settings['package-name'],
-        displayName: settings['plugin-display-name'],
-        description: settings['plugin-description'],
-        publisher: {
-          name: settings['plugin-author'],
-        },
-      },
-      repository: {
-        type: 'git',
-        url: settings['package-repo'],
-      },
-      scripts: {
-        update: '',
-      },
-      bugs: {
-        url: `${settings['package-repo']}/issues`,
-      },
-      homepage: `https://insomnia.rest/plugins/${settings['package-name']}`,
-      insomniaPluginsPath: settings['plugins-path'],
-    }
+  original: {
+    [key: string]: any
   }
-  const keysToReplace = Object.keys(replaceWith).filter(key => {
-    return !blacklist.includes(key) && !mergelist.includes(key)
+  merger: {
+    [key: string]: any
+  }
+}) => {
+  const keysToReplace = Object.keys(merger).filter(key => {
+    return !defaultBlacklist.includes(key) && !defaultMergelist.includes(key)
   })
-  mergelist.forEach(key => {
-    if (replaceWith[key] || replace[key]) {
-      if (replaceWith[key] && typeof replaceWith[key] !== 'object') {
-        return
-      }
-      if (replace[key] && typeof replace[key] !== 'object') {
-        return
-      }
-      replace[key] = Object.assign(replaceWith[key], replace[key])
-    }
+  defaultMergelist.forEach(key => {
+    const originalValue =
+      original[key] && typeof original[key] === 'object' ? original[key] : {}
+    const mergerValue =
+      merger[key] && typeof merger[key] === 'object' ? merger[key] : {}
+    original[key] = Object.assign(mergerValue, originalValue)
   })
-  keysToReplace.forEach(key => (replace[key] = replaceWith[key]))
-  return replace
+  keysToReplace.forEach(key => (original[key] = merger[key]))
+  return original
 }

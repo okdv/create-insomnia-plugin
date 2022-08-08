@@ -1,7 +1,7 @@
 {
   "name": "create-insomnia-plugin",
-  "version": "1.1.2-alpha.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "An opionated bootstrapper for Insomnia REST Client plugins and themes",
   "main": "dist/index.js",
   "type": "commonjs",
   "scripts": {
@@ -10,14 +10,13 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --ignore-path .prettierignore --write \"**/*.+(js|ts|json)\"",
     "precommit": "npm run lint:fix && npm run format && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "bin": {
     "create-insomnia-plugin": "./dist/index.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
     "@types/fs-extra": "^9.0.13",
@@ -37,5 +36,16 @@
     "fs-extra": "^10.1.0",
     "prompts": "^2.4.2",
     "validate-npm-package-name": "^4.0.0"
+  },
+  "author": {
+    "name": "Otho DuBoise",
+    "url": "https://otho.dev"
+  },
+  "license": "MIT",
+  "homepage": "https://gitlab.com/okdv/create-insomnia-plugin",
+  "bugs": "https://gitlab.com/okdv/create-insomnia-plugin/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/okdv/create-insomnia-plugin.git"
   }
 }
